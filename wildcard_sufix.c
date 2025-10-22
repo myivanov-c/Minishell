@@ -6,84 +6,13 @@
 /*   By: mykytaivanov <mykytaivanov@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/16 18:00:43 by mykytaivano       #+#    #+#             */
-/*   Updated: 2025/10/22 15:58:33 by mykytaivano      ###   ########.fr       */
+/*   Updated: 2025/10/22 22:05:16 by mykytaivano      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void    free_array(char **arr, int k)
-{
-    int     i;
-
-    i = 0;
-    if (!arr)
-        return ;
-    while (i < k && arr[i])
-    {
-        free(arr[i]);
-        i++;
-    }
-    free(arr);
-}
-
-int     ft_strcmp(char *s1, char *s2)
-{
-    int     i;
-
-    i = 0;
-    while (s1[i] && s2[i])
-    {
-        if (s1[i] != s2[i])
-            return (s1[i] - s2[i]);
-        i++;
-    }
-    return (0);
-}
-
-int     ft_strlen(char *str)
-{
-    int     i;
-
-    i = 0;
-    while (str[i] != '\0')
-        i++;
-    return (i);
-}
-
-int     ft_strncmp(char *s1, char *s2, int n)
-{
-    int     i;
-
-    i = 0;
-    while (s1[i] && s2[i] && i < n)
-    {
-        if (s1[i] != s2[i])
-            return (s1[i] - s2[i]);
-        i++;
-    }
-    if (i < n)
-        return (s1[i] - s2[i]);
-    return (0);
-}
-
-int     check_presence_of_wildcard(char *str)
-{
-    int     i;
-    int     result;
-
-    i = 0;
-    result = 0;
-    while (str[i] != '\0')
-    {
-        if (str[i] == '*')
-            result = 1;
-        i++;
-    }
-    return (result);
-}
-
-int     filter_data_size(char *str, int *start)
+int     filter_data_size_su(char *str, int *start)
 {
     int     i;
     int     count;
@@ -104,12 +33,12 @@ int     filter_data_size(char *str, int *start)
     return (count);
 }
 
-char    *store_whats_after_wildcard(char *str, int start)
+char    *store_whats_after_wildcard_su(char *str, int start)
 {
     char    *filter_data;
     int     i;
 
-    filter_data = malloc(sizeof(char) * filter_data_size(str, &start) + 1);
+    filter_data = malloc(sizeof(char) * filter_data_size_su(str, &start) + 1);
     if (!filter_data)
         return (NULL);
     i = 0;
@@ -124,7 +53,7 @@ char    *store_whats_after_wildcard(char *str, int start)
     return (filter_data);
 }
 
-int     check_if_file_valid(char *line_to_compare, int f_size, char *f_data)
+int     check_if_file_valid_su(char *line_to_compare, int f_size, char *f_data)
 {
     int     i;
     int     count;
@@ -145,7 +74,7 @@ int     check_if_file_valid(char *line_to_compare, int f_size, char *f_data)
     return (1);
 }
 
-int     how_many_are_valid(struct dirent *entry, int f_size, char *f_data)
+int     how_many_are_valid_su(struct dirent *entry, int f_size, char *f_data)
 {
     int     count;
     DIR *dir = opendir(".");
@@ -159,7 +88,7 @@ int     how_many_are_valid(struct dirent *entry, int f_size, char *f_data)
     entry = readdir(dir);
     while (entry != NULL)
     {
-            if (check_if_file_valid(entry->d_name, f_size, f_data))
+            if (check_if_file_valid_su(entry->d_name, f_size, f_data))
                 count++;
             entry = readdir(dir);
     }
@@ -167,13 +96,13 @@ int     how_many_are_valid(struct dirent *entry, int f_size, char *f_data)
     return (count);
 }
 
-int copy_line_if_valid(char **dst, struct dirent *entry, int k, int f_size, char *f_data)
+int copy_line_if_valid_su(char **dst, struct dirent *entry, int k, int f_size, char *f_data)
 {
     int     j;
     int     len;
 
     j = 0;
-    if (!check_if_file_valid(entry->d_name, f_size, f_data))
+    if (!check_if_file_valid_su(entry->d_name, f_size, f_data))
         return (0);
     len = ft_strlen(entry->d_name);
     dst[k] = malloc(sizeof(char) * (len + 1));
@@ -188,7 +117,7 @@ int copy_line_if_valid(char **dst, struct dirent *entry, int k, int f_size, char
     return (1);
 }
 
-int fill_filtered_array(char **dst, struct dirent *entry, int f_size, char *f_data)
+int fill_filtered_array_su(char **dst, struct dirent *entry, int f_size, char *f_data)
 {
     int     k;
     int     res;
@@ -199,7 +128,7 @@ int fill_filtered_array(char **dst, struct dirent *entry, int f_size, char *f_da
     k = 0;
     while (entry != NULL)
     {
-        res = copy_line_if_valid(dst, entry, k, f_size, f_data);
+        res = copy_line_if_valid_su(dst, entry, k, f_size, f_data);
         if (res == -1)
         {
             free_array(dst, k);
@@ -246,11 +175,11 @@ char    **total_filtered_outcomes_sufix(struct dirent *entry, int f_size, char *
     char    **filtered;
     int     valid;
 
-    valid = how_many_are_valid(entry, f_size, f_data);
+    valid = how_many_are_valid_su(entry, f_size, f_data);
     filtered = malloc(sizeof(char *) * (valid + 1));
     if (!filtered)
         return (NULL);
-    if (fill_filtered_array(filtered, entry, f_size, f_data) == -1)
+    if (fill_filtered_array_su(filtered, entry, f_size, f_data) == -1)
     {
         free_array(filtered, valid);
         return (NULL);
