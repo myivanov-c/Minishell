@@ -6,7 +6,7 @@
 /*   By: mykytaivanov <mykytaivanov@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/16 10:26:44 by mykytaivano       #+#    #+#             */
-/*   Updated: 2025/10/23 14:41:16 by mykytaivano      ###   ########.fr       */
+/*   Updated: 2025/10/23 17:27:46 by mykytaivano      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,9 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <dirent.h>
-//# include "./Libft/libft.h"
+#include "./Libft/libft.h"
 
 void    free_array(char **arr, int k);
-int     ft_strcmp(char *s1, char *s2);
-int     ft_strlen(char *str);
-int     ft_strncmp(char *s1, char *s2, int n);
 int     check_presence_of_wildcard(char *str);
 void    sort_array(char **arr);
 
