@@ -6,7 +6,7 @@
 /*   By: mykytaivanov <mykytaivanov@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/16 18:00:43 by mykytaivano       #+#    #+#             */
-/*   Updated: 2025/10/22 22:05:16 by mykytaivano      ###   ########.fr       */
+/*   Updated: 2025/10/23 15:11:34 by mykytaivano      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@ int     filter_data_size_su(char *str, int *start)
     i = 0;
     count = 0;
     *start = 0;
-    while (str[i] != '*')
+    while (str[i] == '*')
         i++;
-    if (str[i] == '*')
+    if (str[i] != '*')
         *start = i;
     i++;
     while (str[i] != '\0')
@@ -201,9 +201,10 @@ char    **total_filtered_outcomes_sufix(struct dirent *entry, int f_size, char *
         return (0);
     if (!check_presence_of_wildcard(argv[1]))
         return (0);
-    size = filter_data_size(argv[1], &start);
-    filter_data = store_whats_after_wildcard(argv[1], start);
-    dest = total_filtered_outcomes(entry, size, filter_data);
+    size = filter_data_size_su(argv[1], &start);
+    printf("The size is %d\n", size);
+    filter_data = store_whats_after_wildcard_su(argv[1], start);
+    dest = total_filtered_outcomes_sufix(entry, size, filter_data);
     i = 0;
     while (dest[i] != NULL)
     {

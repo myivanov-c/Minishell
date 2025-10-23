@@ -6,7 +6,7 @@
 /*   By: mykytaivanov <mykytaivanov@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/16 10:26:44 by mykytaivano       #+#    #+#             */
-/*   Updated: 2025/10/22 22:02:31 by mykytaivano      ###   ########.fr       */
+/*   Updated: 2025/10/23 14:41:16 by mykytaivano      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,14 @@ int     how_many_are_valid_su(struct dirent *entry, int f_size, char *f_data);
 int     copy_line_if_valid_su(char **dst, struct dirent *entry, int k, int f_size, char *f_data);
 int     fill_filtered_array_su(char **dst, struct dirent *entry, int f_size, char *f_data);
 char    **total_filtered_outcomes_sufix(struct dirent *entry, int f_size, char *f_data);
+
+int     filter_data_size_mid(char *str, int *start);
+char    *store_whats_in_wildcard_mid(char *str, int start);
+int     check_if_file_valid_mid(char *line_to_compare, int f_size, char *f_data);
+int     how_many_are_valid_mid(struct dirent *entry, int f_size, char *f_data);
+int     copy_line_if_valid_mid(char **dst, struct dirent *entry, int k, int f_size, char *f_data);
+int     fill_filtered_array_mid(char **dst, struct dirent *entry, int f_size, char *f_data);
+char    **total_filtered_outcomes_mid(struct dirent *entry, int f_size, char *f_data);
 
 int     scan_argument(char *str);
 void     sufix_mode(char *str);
