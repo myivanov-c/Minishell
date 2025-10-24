@@ -6,7 +6,7 @@
 /*   By: mykytaivanov <mykytaivanov@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 17:30:18 by mykytaivano       #+#    #+#             */
-/*   Updated: 2025/10/23 17:26:02 by mykytaivano      ###   ########.fr       */
+/*   Updated: 2025/10/23 21:52:54 by mykytaivano      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,47 @@ void    free_array(char **arr, int k)
         i++;
     }
     free(arr);
+}
+
+int     ft_strcmp(char *s1, char *s2)
+{
+    int     i;
+
+    i = 0;
+    while (s1[i] && s2[i])
+    {
+        if (s1[i] != s2[i])
+            return (s1[i] - s2[i]);
+        i++;
+    }
+    return (s1[i] - s2[i]);
+}
+
+void    sort_array(char **arr)
+{
+    int     i;
+    int     swapped;
+    char    *temp;
+
+    if (!arr)
+        return ;
+    swapped = 1;
+    while (swapped)
+    {
+        i = 0;
+        swapped = 0;
+        while (arr[i] && arr[i + 1])
+        {
+            if (ft_strcmp(arr[i], arr[i + 1]) > 0)
+            {
+                temp = arr[i];
+                arr[i] = arr[i + 1];
+                arr[i + 1] = temp;
+                swapped = 1;
+            }
+            i++;
+        }
+    }
 }
 
 int     check_presence_of_wildcard(char *str)
