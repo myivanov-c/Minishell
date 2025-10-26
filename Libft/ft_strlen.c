@@ -6,14 +6,14 @@
 /*   By: mykytaivanov <mykytaivanov@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 10:27:21 by mykytaivano       #+#    #+#             */
-/*   Updated: 2025/10/23 17:27:17 by mykytaivano      ###   ########.fr       */
+/*   Updated: 2025/10/25 17:38:12 by mykytaivano      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include <stddef.h>
 
-int     ft_strlen (char *str)
+size_t     ft_strlen (char *str)
 {
     int    i;
 

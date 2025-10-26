@@ -6,7 +6,7 @@
 /*   By: mykytaivanov <mykytaivanov@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/24 17:27:19 by mykytaivano       #+#    #+#             */
-/*   Updated: 2025/10/24 17:29:40 by mykytaivano      ###   ########.fr       */
+/*   Updated: 2025/10/25 18:21:50 by mykytaivano      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ void    filter_mode_loops(char  *str, int *has_start, int *has_end, int *has_wor
 {
     int     i;
 
+    if (!str)
+        return ;
     i = 0;
     while (str[i] == '*')
     {
@@ -40,70 +42,83 @@ int     filter_mode(char *str)
     int     has_start;
     int     has_end;
     int     has_word;
-    int     mode;
     
-    mode = -1;
+    if (!str || !str[0])
+        return (-1);
     has_start = 0;
     has_end = 0;
     has_word = 0;
     filter_mode_loops(str, &has_start, &has_end, &has_word);
     if (has_start && has_word && !has_end) // *abc*das
-        mode = 1;
+        return (1);
     else if (!has_start && has_word && has_end) // abc*asd*
-        mode = 2;
+        return (2);
     else if (!has_start && has_word && !has_end) // abs*ads
-        mode = 3;
+        return (3);
     else if (has_start && has_word && has_end) // *ada*das*
-        mode = 4;
+        return (4);
     else if (has_start && !has_word) // ***
-        mode = 5;
-    return (mode);
+        return (5);
+    return (-1);
 }
 
-int     filter_mode_1_helper(char *line_to_compare, char **res, char *str)
+int     filter_mode_1_helper(char *line_to_compare, char **res)
 {
     int     i;
-    int     count;;
+    size_t     len;
     int     res_count;
-    int     size;
+    size_t     size;
     
-    res = filtered_array_multi(str);
-    if (!res)
+    if (!line_to_compare)
+        return (0);
+    if (line_to_compare[0] == '.')
         return (0);
     res_count = 0;
-    count = 0;
     while (res[res_count + 1] != NULL)
         res_count++;
-    i = ft_strlen(line_to_compare);
     size = ft_strlen(res[res_count]);
-    while (count < size)
-    {
-        i--;
-        count++;
-    }
-    if (ft_strncmp(&line_to_compare[i], res[res_count], size) == 0)
+    len = ft_strlen(line_to_compare);
+    if (size > len)
+        return(0);
+    i = len - size;
+    if (ft_strncmp(line_to_compare + i, res[res_count], size) == 0)
         return (1);
     return (0);
 }
 
-int     filter_mode_helper(char *line_to_compare, char **res, char *str)
+int     all_strings_empty(char **res)
 {
-    int     i;
-    int     j;
+	int     i;
 
     i = 0;
-    j = 0;
-    res = filtered_array_multi(str);
-    if (!res)
-    {
-        free(res);
+	while (res[i])
+	{
+		if (res[i][0] != '\0')
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+
+int     filter_mode_helper(char *line_to_compare, char **res)
+{
+    int i;
+    int j;
+
+    if (!line_to_compare)
         return (0);
-    }
-    while (line_to_compare[i] != '\0')
+    i = 0;
+    j = 0;
+    if (line_to_compare[0] == '.')
+        return (0);
+    if (all_strings_empty(res))
+        return (1);
+    while (line_to_compare[i] && res[j])
     {
-        if (res[j] != NULL && ft_strncmp(&line_to_compare[i], res[j], ft_strlen(res[j])) == 0)
+        if (ft_strncmp(line_to_compare + i, res[j], ft_strlen(res[j])) == 0)
         {
-            i = i + ft_strlen(res[j]) - 1;
+            i = i + ft_strlen(res[j]);
             j++;
         }
         else
@@ -114,17 +129,19 @@ int     filter_mode_helper(char *line_to_compare, char **res, char *str)
     return (0);
 }
 
-int     filter_mode_2_helper(char *line_to_compare, char **res, char *str)
+int     filter_mode_2_helper(char *line_to_compare, char **res)
 {
-    int     i;
-    int     res_size;
-
-    res = ft_split(str, '*');
+    size_t     len;
+    
+    if (!line_to_compare)
+        return (0);
     if (line_to_compare[0] == '.')
         return (0);
-    res_size = ft_strlen(res[0]);
-    i = 0;
-    if (ft_strncmp(&line_to_compare[i], res[0], res_size) != 0)
+    len = ft_strlen(res[0]);
+    if (len > ft_strlen(line_to_compare))
         return (0);
-    return (1);
+    if (ft_strncmp(line_to_compare, res[0], len) == 0)
+        return (1);
+    return (0);
 }
+
