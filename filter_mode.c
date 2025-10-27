@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   filter_mode_and_helpers.c                          :+:      :+:    :+:   */
+/*   filter_mode.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mykytaivanov <mykytaivanov@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/24 17:27:19 by mykytaivano       #+#    #+#             */
-/*   Updated: 2025/10/25 18:21:50 by mykytaivano      ###   ########.fr       */
+/*   Updated: 2025/10/27 13:04:12 by mykytaivano      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int     filter_mode(char *str)
     return (-1);
 }
 
-int     filter_mode_1_helper(char *line_to_compare, char **res)
+int     filter_mode_1_helper(char *line_to_compare, t_wildcard *w)
 {
     int     i;
     size_t     len;
@@ -71,37 +71,22 @@ int     filter_mode_1_helper(char *line_to_compare, char **res)
     
     if (!line_to_compare)
         return (0);
-    if (line_to_compare[0] == '.')
-        return (0);
+    if (line_to_compare[0] == '.' && !pattern_allows_hidden(w))
+	    return (0);
     res_count = 0;
-    while (res[res_count + 1] != NULL)
+    while (w->split_chars[res_count + 1] != NULL)
         res_count++;
-    size = ft_strlen(res[res_count]);
+    size = ft_strlen(w->split_chars[res_count]);
     len = ft_strlen(line_to_compare);
     if (size > len)
         return(0);
     i = len - size;
-    if (ft_strncmp(line_to_compare + i, res[res_count], size) == 0)
+    if (ft_strncmp(line_to_compare + i, w->split_chars[res_count], size) == 0)
         return (1);
     return (0);
 }
 
-int     all_strings_empty(char **res)
-{
-	int     i;
-
-    i = 0;
-	while (res[i])
-	{
-		if (res[i][0] != '\0')
-			return (0);
-		i++;
-	}
-	return (1);
-}
-
-
-int     filter_mode_helper(char *line_to_compare, char **res)
+int     filter_mode_helper(char *line_to_compare, t_wildcard *w)
 {
     int i;
     int j;
@@ -110,37 +95,37 @@ int     filter_mode_helper(char *line_to_compare, char **res)
         return (0);
     i = 0;
     j = 0;
-    if (line_to_compare[0] == '.')
-        return (0);
-    if (all_strings_empty(res))
+    if (line_to_compare[0] == '.' && !pattern_allows_hidden(w))
+	    return (0);
+    if (all_strings_empty(w))
         return (1);
-    while (line_to_compare[i] && res[j])
+    while (line_to_compare[i] && w->split_chars[j])
     {
-        if (ft_strncmp(line_to_compare + i, res[j], ft_strlen(res[j])) == 0)
+        if (ft_strncmp(line_to_compare + i, w->split_chars[j], ft_strlen(w->split_chars[j])) == 0)
         {
-            i = i + ft_strlen(res[j]);
+            i = i + ft_strlen(w->split_chars[j]);
             j++;
         }
         else
             i++;
     }
-    if (res[j] == NULL)
+    if (w->split_chars[j] == NULL)
         return (1);
     return (0);
 }
 
-int     filter_mode_2_helper(char *line_to_compare, char **res)
+int     filter_mode_2_helper(char *line_to_compare, t_wildcard *w)
 {
     size_t     len;
     
     if (!line_to_compare)
         return (0);
-    if (line_to_compare[0] == '.')
-        return (0);
-    len = ft_strlen(res[0]);
+    if (line_to_compare[0] == '.' && !pattern_allows_hidden(w))
+	    return (0);
+    len = ft_strlen(w->split_chars[0]);
     if (len > ft_strlen(line_to_compare))
         return (0);
-    if (ft_strncmp(line_to_compare, res[0], len) == 0)
+    if (ft_strncmp(line_to_compare, w->split_chars[0], len) == 0)
         return (1);
     return (0);
 }
