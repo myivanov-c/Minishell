@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "wildcards.h"
 
 void    filter_mode_loops(char  *str, int *has_start, int *has_end, int *has_word)
 {

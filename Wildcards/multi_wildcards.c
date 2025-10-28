@@ -6,11 +6,11 @@
 /*   By: mykytaivanov <mykytaivanov@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/23 17:08:29 by mykytaivano       #+#    #+#             */
-/*   Updated: 2025/10/27 13:35:36 by mykytaivano      ###   ########.fr       */
+/*   Updated: 2025/10/28 10:24:15 by mykytaivano      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "wildcards.h"
 
 int how_many_files_are_valid_multi(t_wildcard *w)
 {

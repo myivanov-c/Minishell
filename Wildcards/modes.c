@@ -6,11 +6,11 @@
 /*   By: mykytaivanov <mykytaivanov@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/24 17:30:04 by mykytaivano       #+#    #+#             */
-/*   Updated: 2025/10/27 12:50:30 by mykytaivano      ###   ########.fr       */
+/*   Updated: 2025/10/28 10:24:07 by mykytaivano      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "wildcards.h"
 
 int     filter_mode_1(char *line_to_compare, t_wildcard *w)
 {

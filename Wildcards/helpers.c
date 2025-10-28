@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "wildcards.h"
 
 int     all_strings_empty(t_wildcard *w)
 {

@@ -6,11 +6,11 @@
 /*   By: mykytaivanov <mykytaivanov@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 13:31:25 by mykytaivano       #+#    #+#             */
-/*   Updated: 2025/10/27 13:38:51 by mykytaivano      ###   ########.fr       */
+/*   Updated: 2025/10/28 10:24:27 by mykytaivano      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "wildcards.h"
 
 int     calculate_size_of_new_array(char **original, char **to_append)
 {

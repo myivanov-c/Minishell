@@ -6,12 +6,12 @@
 /*   By: mykytaivanov <mykytaivanov@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/16 10:26:44 by mykytaivano       #+#    #+#             */
-/*   Updated: 2025/10/27 13:38:44 by mykytaivano      ###   ########.fr       */
+/*   Updated: 2025/10/28 10:23:37 by mykytaivano      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#ifndef WILDCARDS_H
+# define WILDCARDS_H
 
 #include <stdio.h>
 #include <unistd.h>
