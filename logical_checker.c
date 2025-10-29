@@ -34,6 +34,22 @@ int     ft_strcmp(char *s1, char *s2)
     return (s1[i] - s2[i]);
 }
 
+void    free_array_n(char **arr, int n)
+{
+    int     i;
+
+    if (!arr || n <= 0)
+        return ;
+    i = 0;
+    while (i < n)
+    {
+        free(arr[i]);
+        arr[i] = NULL;
+        i++;
+    }
+    free(arr);
+}
+
 void    free_array_split(char **arr)
 {
     int     i;
@@ -64,6 +80,34 @@ int     has_operator(char **str, int i)
         j++;
     }
     return (0);
+}
+
+int     check_for_valid_operators(char **res)
+{
+    int     i;
+    int     j;
+    int     valid;
+    size_t  len;
+
+    i = 0;
+    valid = 0;
+    while (res[i] != NULL)
+    {
+        len = ft_strlen(res[i]);
+        j = 0;
+        while (j < len)
+        {
+            if (ft_strncmp(&res[i][j], "&&", 2) == 0 || ft_strncmp(&res[i][j], "||", 2) == 0)
+            {
+                valid++;
+                break ;
+            }
+            else
+                j++;
+        }
+        i++;
+    }
+    return (valid);
 }
 
 int     check_for_logical_operators(char **res)
@@ -116,14 +160,22 @@ int check_if_logical_mode(char *str)
     return (status);
 }
 
-
 int     main(int argc, char **argv)
 {
     int     status;
+    char    **res;
+    int     i;
     
     if (argc < 2)
         return (0);
-    status = check_if_logical_mode(argv[1]);
+    status = smart_array_size(argv[1]);
+    res = smart_split(argv[1]);
+    i = 0;
+    while (res[i] != NULL)
+    {
+        printf("In pos %d, I have: %s\n", i, res[i]);
+        i++;
+    }
     printf("Status check: %d\n", status);
     return (0);
 }
