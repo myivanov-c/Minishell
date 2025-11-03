@@ -6,7 +6,7 @@
 /*   By: mykytaivanov <mykytaivanov@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/23 17:08:29 by mykytaivano       #+#    #+#             */
-/*   Updated: 2025/10/28 10:24:15 by mykytaivano      ###   ########.fr       */
+/*   Updated: 2025/10/30 16:54:32 by mykytaivano      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ char **total_filtered_outcomes_multi(char *str)
 	return (filtered);
 }
 
-int main(int argc, char **argv)
+/*int main(int argc, char **argv)
 {
     char **final;
     int i;
@@ -136,4 +136,4 @@ int main(int argc, char **argv)
     }
     free(final);
     return (0);
-}
+}*/

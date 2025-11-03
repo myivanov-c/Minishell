@@ -6,7 +6,7 @@
 /*   By: mykytaivanov <mykytaivanov@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 11:48:29 by mykytaivano       #+#    #+#             */
-/*   Updated: 2025/04/21 23:32:32 by mykytaivano      ###   ########.fr       */
+/*   Updated: 2025/10/30 14:59:30 by mykytaivano      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,3 @@ void    *ft_memcpy(void *dest, const void *src, size_t n)
    return (dest);
 }
 
-int     main(void)
-{
-    char    dest[] = "Vou ter uma frase nova aq";
-    char    src[] = "Aston Martin goes to dest";
-
-    ft_memcpy(dest, src, 27);
-    printf("%s\n", dest);
-    return (0);
-}

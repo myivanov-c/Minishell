@@ -10,104 +10,31 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-#include <stdio.h>
-# include "./Libft/libft.h"
+#include "loperators.h"
+#include "Wildcards/wildcards.h"
 
-int     ft_strcmp(char *s1, char *s2)
+int     parentheses_are_balanced(char **res)
 {
     int     i;
-
-    if (s1 == s2)
-        return (0);
-    if (!s1)
-        return (-1);
-    if (!s2)
-        return (1);
-    i = 0;
-    while (s1[i] && s2[i])
-    {
-        if (s1[i] != s2[i])
-            return (s1[i] - s2[i]);
-        i++;
-    }
-    return (s1[i] - s2[i]);
-}
-
-void    free_array_n(char **arr, int n)
-{
-    int     i;
-
-    if (!arr || n <= 0)
-        return ;
-    i = 0;
-    while (i < n)
-    {
-        free(arr[i]);
-        arr[i] = NULL;
-        i++;
-    }
-    free(arr);
-}
-
-void    free_array_split(char **arr)
-{
-    int     i;
+    int     open;
 
     i = 0;
-    if (!arr)
-        return ;
-    while (arr[i])
+    open = 0;
+    while (res[i])
     {
-        free(arr[i]);
-        arr[i] = NULL;
-        i++;
-    }
-    free(arr);
-}
-
-int     has_operator(char **str, int i)
-{
-    int     j;
-  
-    if (!str[i])
-        return (0);
-    j = 0;
-    while (str[i][j] != '\0')
-    {
-        if (str[i][j] == '&' || str[i][j] == '|')
-            return (1);
-        j++;
-    }
-    return (0);
-}
-
-int     check_for_valid_operators(char **res)
-{
-    int     i;
-    int     j;
-    int     valid;
-    size_t  len;
-
-    i = 0;
-    valid = 0;
-    while (res[i] != NULL)
-    {
-        len = ft_strlen(res[i]);
-        j = 0;
-        while (j < len)
+        if (ft_strcmp(res[i], "(") == 0)
+            open++;
+        else if (ft_strcmp(res[i], ")") == 0)
         {
-            if (ft_strncmp(&res[i][j], "&&", 2) == 0 || ft_strncmp(&res[i][j], "||", 2) == 0)
-            {
-                valid++;
-                break ;
-            }
-            else
-                j++;
+            if (open == 0)
+                return (0);
+            open--;
         }
         i++;
     }
-    return (valid);
+    if (open == 0)
+        return (1);
+    return (0);
 }
 
 int     check_for_logical_operators(char **res)
@@ -117,11 +44,16 @@ int     check_for_logical_operators(char **res)
 
     i = 0;
     valid = 0;
+    if (has_operator(res, 0))
+    {
+        if (is_operator(res[0]))
+                return (0);
+    }
     while (res[i] != NULL)
     {
         if (has_operator(res, i))
         {
-            if (ft_strcmp(res[i], "&&") == 0 || ft_strcmp(res[i], "||") == 0)
+            if (is_operator(res[i]))
                 valid++;
             else
                 return (0);
@@ -131,34 +63,166 @@ int     check_for_logical_operators(char **res)
     return (valid);
 }
 
-int check_if_logical_mode(char *str)
+int     check_adjacent_operators(char **res)
 {
-    char **res;
-    int i;
-    int status;
+	int	i;
 
-    res = ft_split(str, ' ');
-    if (!res)
-        return (0);
-    if (check_for_logical_operators(res) == 0)
-        return (0);
+	i = 0;
+	while (res[i])
+	{
+		if (is_operator(res[i]))
+		{
+			if (res[i + 1] && is_operator(res[i + 1]))
+				return (0);
+			return (1);
+		}
+		i++;
+	}
+	return (0);
+}
+
+int     count_commands(char **res)
+{
+    int     count;
+    int     i;
+
     i = 0;
-    status = 0;
-    while (res[i] != NULL)
+    count = 1;
+    while (res[i])
     {
-        if ((ft_strcmp(res[i], "&&") == 0 || ft_strcmp(res[i], "||") == 0))
-        {
-            if (res[i + 1] && (ft_strcmp(res[i + 1], "&&") == 0 || ft_strcmp(res[i + 1], "||") == 0))
-                break ;
-            else
-                status = 1;
-        }
+        if (is_operator(res[i]))
+            count++;
         i++;
     }
-    if (status == 0)
-        return (free_array_split(res), status);
-    return (status);
+    return (count);
 }
+
+t_split_org	*init_struct_array(char **res, int *num_cmds)
+{
+	t_split_org	*s_org;
+
+	*num_cmds = count_commands(res);
+	s_org = malloc(sizeof(t_split_org) * (*num_cmds + 1));
+	if (!s_org)
+		return (NULL);
+	ft_bzero(s_org, sizeof(t_split_org) * (*num_cmds + 1));
+	return (s_org);
+}
+
+int	fill_command_struct(t_split_org *s_org, char **res, int *i, int k)
+{
+	while (res[*i] && ft_strcmp(res[*i], "(") == 0)
+		s_org[k].open_p = res[(*i)++];
+	if (!res[*i] || ft_strcmp(res[*i], ")") == 0 || is_operator(res[*i]))
+		return (0);
+	s_org[k].cmd = res[(*i)++];
+	if (res[*i] && !is_operator(res[*i])
+		&& ft_strcmp(res[*i], "(") != 0
+		&& ft_strcmp(res[*i], ")") != 0)
+		s_org[k].arg = res[(*i)++];
+	if (res[*i] && ft_strcmp(res[*i], ")") == 0)
+		s_org[k].close_p = res[(*i)++];
+	if (res[*i] && is_operator(res[*i]))
+		s_org[k].op = res[(*i)++];
+	return (1);
+}
+
+t_split_org	*parse_tokens_to_struct(char **res)
+{
+	int			i;
+	int			k;
+	int			num_cmds;
+	t_split_org	*s_org;
+
+	i = 0;
+	k = 0;
+	s_org = init_struct_array(res, &num_cmds);
+	if (!s_org)
+		return (NULL);
+	while (res[i])
+	{
+		if (!fill_command_struct(s_org, res, &i, k))
+		{
+			free(s_org);
+			return (NULL);
+		}
+		k++;
+	}
+	s_org[k].cmd = NULL;
+	s_org[k].arg = NULL;
+	s_org[k].op = NULL;
+	s_org[k].open_p = NULL;
+	s_org[k].close_p = NULL;
+	return (s_org);
+}
+
+int	invalid_token(char *token)
+{
+	if (!token)
+		return (1);
+	if (is_operator(token))
+		return (1);
+	if ((token[0] == '(' && token[1] == '\0')
+		|| (token[0] == ')' && token[1] == '\0'))
+		return (1);
+	return (0);
+}
+int	invalid_operator_context(t_split_org *s, int i)
+{
+	if (!s[i + 1].cmd || !s[i + 1].arg)
+		return (1);
+	if (is_operator(s[i + 1].cmd) || is_operator(s[i + 1].arg))
+		return (1);
+	if ((s[i + 1].arg[0] == '(' && s[i + 1].arg[1] == '\0')
+		|| (s[i + 1].arg[0] == ')' && s[i + 1].arg[1] == '\0'))
+		return (1);
+	return (0);
+}
+
+int	check_struct_syntax(t_split_org *s)
+{
+	int	i;
+
+	i = 0;
+	while (s[i].cmd != NULL)
+	{
+		if (invalid_token(s[i].cmd) || invalid_token(s[i].arg))
+			return (0);
+		if (s[i].op && invalid_operator_context(s, i))
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+
+int	check_if_logical_mode(char *str)
+{
+	char		**res;
+	t_split_org	*s_org;
+
+	res = smart_split(str);
+	if (!res)
+		return (0);
+	if (check_for_logical_operators(res) == 0
+		|| last_token_is_operator(res)
+		|| parentheses_are_balanced(res) == 0
+		|| check_adjacent_operators(res) == 0)
+		return (free_array_split(res), 0);
+	s_org = parse_tokens_to_struct(res);
+	if (!s_org)
+		return (free_array_split(res), 0);
+	if (!check_struct_syntax(s_org))
+	{
+		free(s_org);
+		free_array_split(res);
+		return (0);
+	}
+	free(s_org);
+	free_array_split(res);
+	return (1);
+}
+
 
 int     main(int argc, char **argv)
 {
@@ -168,14 +232,15 @@ int     main(int argc, char **argv)
     
     if (argc < 2)
         return (0);
-    status = smart_array_size(argv[1]);
     res = smart_split(argv[1]);
+    status = check_if_logical_mode(argv[1]);
     i = 0;
     while (res[i] != NULL)
     {
         printf("In pos %d, I have: %s\n", i, res[i]);
         i++;
     }
+    free_array_split(res);
     printf("Status check: %d\n", status);
     return (0);
 }
