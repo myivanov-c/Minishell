@@ -6,7 +6,7 @@
 /*   By: mykytaivanov <mykytaivanov@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 11:59:08 by mykytaivano       #+#    #+#             */
-/*   Updated: 2025/10/30 17:22:33 by mykytaivano      ###   ########.fr       */
+/*   Updated: 2025/11/04 12:27:18 by mykytaivano      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,6 @@ char	**smart_split(char *str)
     if (!res)
         return (NULL);
     if (!smart_loop(str, res))
-        return (NULL);
+        return (NULL); 
     return (res);
 }

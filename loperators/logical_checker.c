@@ -224,7 +224,7 @@ int	check_if_logical_mode(char *str)
 }
 
 
-int     main(int argc, char **argv)
+/*int     main(int argc, char **argv)
 {
     int     status;
     char    **res;
@@ -243,4 +243,4 @@ int     main(int argc, char **argv)
     free_array_split(res);
     printf("Status check: %d\n", status);
     return (0);
-}
+}/*

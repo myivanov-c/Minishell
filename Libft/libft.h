@@ -6,7 +6,7 @@
 /*   By: mykytaivanov <mykytaivanov@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 21:53:50 by mykytaivano       #+#    #+#             */
-/*   Updated: 2025/07/01 17:55:17 by mykytaivano      ###   ########.fr       */
+/*   Updated: 2025/11/04 15:14:16 by mykytaivano      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ typedef struct   s_list
     struct s_list   *next;
 }                   t_list;
 
-void    ft_lstadd_back(t_list **lst, t_list *new);
+int    ft_lstadd_back(t_list **lst, t_list *new);
 void    ft_lstdelone(t_list *lst, void (*del)(void *));
 void    ft_lstclear(t_list **lst, void (*del)(void *));
 void    ft_lstiter(t_list *lst, void (*f)(void *));

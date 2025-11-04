@@ -6,28 +6,24 @@
 /*   By: mykytaivanov <mykytaivanov@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 22:35:44 by mykytaivano       #+#    #+#             */
-/*   Updated: 2025/04/16 23:04:35 by mykytaivano      ###   ########.fr       */
+/*   Updated: 2025/11/04 14:54:57 by mykytaivano      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include "libft.h"
 
-void    ft_lstadd_back(t_list **lst, t_list *new)
+int    ft_lstadd_back(t_list **lst, t_list *new)
 {
-    t_list  *last;
-
-    if (lst == NULL)
-    {
-        return ;
-    }
-    if (*lst == NULL)
+    if (!lst ||  !new)
+        return (-1);
+    if (!(*lst))
     {
         *lst = new;
-        return ;
+        return (0);
     }
-    last = ft_lstlast(*lst);
-    last -> next = new;
+    ft_lstlast(*lst)->next = new;
+    return (0);
 }
 
 /*int     main(void)
