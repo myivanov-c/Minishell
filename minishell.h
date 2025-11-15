@@ -6,7 +6,7 @@
 /*   By: mykytaivanov <mykytaivanov@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 14:43:06 by mykytaivano       #+#    #+#             */
-/*   Updated: 2025/11/04 14:43:08 by mykytaivano      ###   ########.fr       */
+/*   Updated: 2025/11/15 11:47:44 by mykytaivano      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,9 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 
+# include "libft/libft.h"         // <- inclui as funções tipo ft_strlen, etc
+# include "parse_line/parse_line.h"
+
 typedef struct s_cmd
 {
 	char	*cmd_full_str;
@@ -26,22 +29,7 @@ typedef struct s_cmd
 	char	**cmd_args;
 }	t_cmd;
 
-typedef struct s_cmdtree
-{
-	struct s_list		*tokens;
-	int					type;
-	int					fd_input;
-	int					fd_pipe;
-	int					fd_output;
-	int					output_append_mode;
-	int					exit_status;
-	int					exec_status;
-	struct s_cmdtree	*parent;
-	struct s_cmdtree	*child1;
-	struct s_cmdtree	*child2;
-	struct s_cmd		*cmd;
-}	t_cmdtree;
-// type 0 = ()    type 1 = &&    type 2 = ||    type 3 = |    type 4 = cmd
+// type 0 = ()    type 1 = |    type 2 = &&    type 3 = ||    type 4 = cmd
 // exec_status 0 = not run    exec_status 1 = running    exec_status 2 = done
 
 typedef struct s_cmdtree_simple
@@ -53,7 +41,9 @@ typedef struct s_cmdtree_simple
 	struct s_cmdtree	*child2;
 }	t_cmdtree_simple;
 
-t_cmd	*parse_line(char const *line);
+t_cmd     *parse_line(t_list *tokens);
+
+int     ft_strcmp(char *s1, char *s2);
 
 void	free_cmd_array(t_cmd *cmd_array);
 void	free_str_array(char **str_array);

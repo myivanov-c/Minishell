@@ -6,10 +6,9 @@
 /*   By: mykytaivanov <mykytaivanov@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 14:52:21 by mykytaivano       #+#    #+#             */
-/*   Updated: 2025/11/04 15:19:18 by mykytaivano      ###   ########.fr       */
+/*   Updated: 2025/11/15 11:44:42 by mykytaivano      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "../minishell.h"
 #include "parse_line.h"
@@ -44,7 +43,7 @@ int	expand_envs(t_cmdtree *cmdtree)
 	return (0);
 }
 
-/*static int	expand_envs_token(t_token *token)
+static int	expand_envs_token(t_token *token)
 {
 	int	i;
 	int	j;
@@ -67,12 +66,12 @@ int	expand_envs(t_cmdtree *cmdtree)
 			i++;
 	}
 	return (split_token(token));
-}*/
+}
 
-/*static int	replace_env(t_token *token, int i)
+static int	replace_env(t_token *token, int i)
 {
 	
-}*/
+}
 static int	replace_env(t_token *token, int i)
 {
 	int		j;

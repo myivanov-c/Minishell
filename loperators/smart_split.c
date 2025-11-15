@@ -6,12 +6,12 @@
 /*   By: mykytaivanov <mykytaivanov@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 11:59:08 by mykytaivano       #+#    #+#             */
-/*   Updated: 2025/11/04 12:27:18 by mykytaivano      ###   ########.fr       */
+/*   Updated: 2025/11/07 18:55:05 by mykytaivano      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "loperators.h"
-#include "Wildcards/wildcards.h"
+
 
 int     smart_array_size(char *str)
 {

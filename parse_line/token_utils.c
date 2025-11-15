@@ -6,10 +6,9 @@
 /*   By: mykytaivanov <mykytaivanov@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 14:51:02 by mykytaivano       #+#    #+#             */
-/*   Updated: 2025/11/04 15:33:17 by mykytaivano      ###   ########.fr       */
+/*   Updated: 2025/11/15 11:46:28 by mykytaivano      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "../minishell.h"
 #include "parse_line.h"
@@ -76,6 +75,11 @@ int	fill_token_flags(t_token *token)
 	if (inside_quotes)
 		return (-1);
 	return (0);
+}
+
+int     ft_isspace(char c)
+{
+    return (c == ' ' || c == '\t' || c == '\n');
 }
 
 void	free_token(void *token)

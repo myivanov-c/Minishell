@@ -6,12 +6,12 @@
 /*   By: mykytaivanov <mykytaivanov@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/30 17:23:36 by mykytaivano       #+#    #+#             */
-/*   Updated: 2025/11/04 15:17:23 by mykytaivano      ###   ########.fr       */
+/*   Updated: 2025/11/07 18:54:58 by mykytaivano      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "loperators.h"
-#include "Wildcards/wildcards.h"
+
 
 int     is_operator(char *s)
 {

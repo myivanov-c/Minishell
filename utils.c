@@ -6,7 +6,7 @@
 /*   By: mykytaivanov <mykytaivanov@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 14:43:33 by mykytaivano       #+#    #+#             */
-/*   Updated: 2025/11/04 15:23:08 by mykytaivano      ###   ########.fr       */
+/*   Updated: 2025/11/15 11:42:58 by mykytaivano      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,15 +32,9 @@ int     ft_strcmp(char *s1, char *s2)
     return (s1[i] - s2[i]);
 }
 
-int     ft_isspace(char c)
-{
-    return (c == ' ' || c == '\t' || c == '\n');
-}
-
 void	free_cmd_array(t_cmd *cmd_array)
 {
 	int	i;
-	int	j;
 
 	if (!cmd_array)
 		return ;

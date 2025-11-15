@@ -6,7 +6,7 @@
 /*   By: mykytaivanov <mykytaivanov@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 11:59:34 by mykytaivano       #+#    #+#             */
-/*   Updated: 2025/11/04 15:17:40 by mykytaivano      ###   ########.fr       */
+/*   Updated: 2025/11/07 19:02:12 by mykytaivano      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 
 #include <unistd.h>
 #include <stdio.h>
-#include "./Libft/libft.h"
+#include "../libft/libft.h"
+#include "../Wildcards/wildcards.h"
 
 typedef struct  s_split_org
 {

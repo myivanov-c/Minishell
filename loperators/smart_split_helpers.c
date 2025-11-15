@@ -6,12 +6,12 @@
 /*   By: mykytaivanov <mykytaivanov@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 12:09:29 by mykytaivano       #+#    #+#             */
-/*   Updated: 2025/11/04 15:17:27 by mykytaivano      ###   ########.fr       */
+/*   Updated: 2025/11/07 18:55:01 by mykytaivano      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "loperators.h"
-#include "Wildcards/wildcards.h"
+
 
 int     is_space(char c)
 {

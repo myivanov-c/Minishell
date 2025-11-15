@@ -6,7 +6,7 @@
 /*   By: mykytaivanov <mykytaivanov@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/16 10:26:44 by mykytaivano       #+#    #+#             */
-/*   Updated: 2025/10/30 16:58:02 by mykytaivano      ###   ########.fr       */
+/*   Updated: 2025/11/07 19:02:19 by mykytaivano      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <dirent.h>
-#include "../Libft/libft.h"
+#include "../libft/libft.h"
 
 typedef struct s_wildcard
 {

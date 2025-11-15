@@ -6,12 +6,11 @@
 /*   By: mykytaivanov <mykytaivanov@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/30 17:20:36 by mykytaivano       #+#    #+#             */
-/*   Updated: 2025/11/04 15:17:29 by mykytaivano      ###   ########.fr       */
+/*   Updated: 2025/11/07 18:55:09 by mykytaivano      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "loperators.h"
-#include "Wildcards/wildcards.h"
 
 int     is_parenthesis(char c)
 {

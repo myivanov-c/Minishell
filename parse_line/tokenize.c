@@ -6,9 +6,10 @@
 /*   By: mykytaivanov <mykytaivanov@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 14:47:19 by mykytaivano       #+#    #+#             */
-/*   Updated: 2025/11/04 15:06:53 by mykytaivano      ###   ########.fr       */
+/*   Updated: 2025/11/15 11:47:02 by mykytaivano      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "../minishell.h"
 #include "parse_line.h"
@@ -16,6 +17,16 @@
 static int	get_len_token_control(char const *line);
 static int	get_len_token(char const *line);
 int			ft_iscontrol(char c);
+
+void    print_list(t_list *list)
+{
+    while (list)
+    {
+        t_token *tok = (t_token *)list->content;
+        printf("List: %s\n", tok->str);
+        list = list->next;
+    }
+}
 
 t_list	*tokenize(char const *line)
 {
@@ -36,7 +47,7 @@ t_list	*tokenize(char const *line)
 		if ((len <= 0)
 			|| (ft_lstadd_back(&tokens, ft_lstnew(new_token(line, len))) == -1)
 			|| (fill_token_flags(ft_lstlast(tokens)->content) == -1))
-			return (ft_lstclear(tokens, free_token), NULL);
+			return (ft_lstclear(&tokens, free_token), NULL);
 		line += len;
 		while (ft_isspace(*line))
 			line++;
@@ -44,11 +55,12 @@ t_list	*tokenize(char const *line)
 	return (tokens);
 }
 
-static int	get_len_token_control(char const *line)
+
+static int	get_len_token_control(const char *line)
 {
 	int			i;
 	int			len;
-	static char	*valid_controls[9] = {
+	static char	*valid_controls[10] = {
 		"||", "|", "<<", "<", ">>", ">", "&&", "(", ")"};
 	
 	i = 0;
