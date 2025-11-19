@@ -6,11 +6,13 @@
 /*   By: mykytaivanov <mykytaivanov@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 13:31:25 by mykytaivano       #+#    #+#             */
-/*   Updated: 2025/10/28 10:24:27 by mykytaivano      ###   ########.fr       */
+/*   Updated: 2025/11/19 15:14:00 by mykytaivano      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "wildcards.h"
+// NO LONGER IN USE
+
+/*#include "wildcards.h"
 
 int     calculate_size_of_new_array(char **original, char **to_append)
 {
@@ -116,5 +118,5 @@ char	**wildcard_engine(char **args)
 		i++;
 	}
 	return (filtered);
-}
+}*/
 
