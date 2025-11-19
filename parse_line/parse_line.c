@@ -6,7 +6,7 @@
 /*   By: mykytaivanov <mykytaivanov@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 14:45:14 by mykytaivano       #+#    #+#             */
-/*   Updated: 2025/11/15 11:45:19 by mykytaivano      ###   ########.fr       */
+/*   Updated: 2025/11/19 12:56:43 by mykytaivano      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	print_cmdtree_simple(t_cmdtree *node, int depth)
 
 
 
-t_cmd	*parse_line(t_list  *tokens)
+/*t_cmd	*parse_line(t_list  *tokens)
 {
 	t_cmdtree	*cmdtree;
 	//int		return_check;
@@ -63,4 +63,19 @@ t_cmd	*parse_line(t_list  *tokens)
 	//return_check = expand_wilds(cmdtree);
 	//return_check = remove_quotes(cmdtree);
     return (NULL);
+}*/
+
+t_cmd	*parse_line(t_list *tokens)
+{
+	t_cmdtree	*cmdtree;
+
+	if (!tokens)
+		return (NULL);
+	cmdtree = create_cmdtree(tokens);
+	ft_lstclear(&tokens, free_token);
+	if (!cmdtree)
+		return (NULL);
+	print_cmdtree_simple(cmdtree, 0);
+	cmdtree_clear(cmdtree);
+	return (NULL);
 }

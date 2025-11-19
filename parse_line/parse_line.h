@@ -6,7 +6,7 @@
 /*   By: mykytaivanov <mykytaivanov@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 14:46:05 by mykytaivano       #+#    #+#             */
-/*   Updated: 2025/11/15 11:45:42 by mykytaivano      ###   ########.fr       */
+/*   Updated: 2025/11/19 12:56:23 by mykytaivano      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,22 @@
 # include <stdlib.h>
 # include <stdio.h>
 
+#define REDIR_IN 0
+#define REDIR_OUT 1
+#define REDIR_APPEND 2
+#define REDIR_HEREDOC 3
+
 typedef struct s_token
 {
 	char	*str;
 	char	*quote_flags;
 }	t_token;
+
+typedef struct s_redirs
+{
+    int     type;
+    char    *file;
+}   t_redirs;
 
 
 typedef struct s_split_result
@@ -75,5 +86,9 @@ void	cmdtree_clear(t_cmdtree *tree);
 void	print_tokens_flat(t_list *tokens);
 
 int     ft_isspace(char c);
+
+
+
+int	extract_token_len(const char *line);
 
 #endif

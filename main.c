@@ -6,11 +6,14 @@
 /*   By: mykytaivanov <mykytaivanov@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 14:38:41 by mykytaivano       #+#    #+#             */
-/*   Updated: 2025/11/15 11:47:12 by mykytaivano      ###   ########.fr       */
+/*   Updated: 2025/11/19 12:54:35 by mykytaivano      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+
 #include "minishell.h"
+
+int	is_redirection_token(char *str);
 
 int	is_operator_str(char *str)
 {
@@ -119,9 +122,6 @@ int	is_line_complete(t_list *tokens)
 	return (1);
 }
 
-
-
-
 int     has_invalid_operator_sequence(t_list *tokens)
 {
 	t_token	*curr;
@@ -144,50 +144,76 @@ int     has_invalid_operator_sequence(t_list *tokens)
 	return (0);
 }
 
+static int	is_invalid_open_paren(t_token *prev, t_token *curr, t_token *next)
+{
+	if (!curr || !curr->str)
+		return (0);
+	if (ft_strcmp(curr->str, "(") != 0)
+		return (0);
+
+	/* Caso 1: algo antes de "(" que não pode */
+	if (prev && prev->str)
+	{
+		if (!is_operator_str(prev->str) && ft_strcmp(prev->str, "(") != 0)
+			return (1);
+	}
+
+	/* Caso 2: depois de "(" vem operador (inválido) */
+	if (next && next->str)
+	{
+		if (is_operator_str(next->str))
+			return (1);
+	}
+
+	return (0);
+}
+
+static int	is_invalid_close_paren(t_token *curr, t_token *next)
+{
+	if (!curr || !curr->str)
+		return (0);
+	if (ft_strcmp(curr->str, ")") != 0)
+		return (0);
+
+	if (!next || !next->str)
+		return (0);
+
+	/* Depois de ")" só pode vir: operador, redirection, ou outra ")" */
+	if (!is_operator_str(next->str)
+		&& !is_redirection_token(next->str)
+		&& ft_strcmp(next->str, ")") != 0)
+	{
+		return (1);
+	}
+	return (0);
+}
+
 int	has_invalid_paren_sequences(t_list *tokens)
 {
-	t_list	*node;
 	t_token	*prev;
 	t_token	*curr;
 	t_token	*next;
 
-	node = tokens;
 	prev = NULL;
-	while (node)
+	while (tokens)
 	{
-		curr = (t_token *)node->content;
-		if (!curr || !curr->str)
-		{
-			prev = curr;
-			node = node->next;
-			continue ;
-		}
-		if (ft_strcmp(curr->str, "(") == 0)
-		{
-			if (prev && prev->str
-				&& !is_operator_str(prev->str)
-				&& ft_strcmp(prev->str, "(") != 0)
-				return (1);
-			if (node->next)
-			{
-				next = (t_token *)node->next->content;
-				if (next && next->str && is_operator_str(next->str))
-					return (1);
-			}
-		}
-		if (ft_strcmp(curr->str, ")") == 0 && node->next)
-		{
-			next = (t_token *)node->next->content;
-			if (next && next->str
-				&& !is_operator_str(next->str)
-				&& ft_strcmp(next->str, ")") != 0)
-				return (1);
-		}
+		curr = (t_token *)tokens->content;
+		if (tokens->next)
+			next = (t_token *)tokens->next->content;
+		else
+			next = NULL;
+
+		if (is_invalid_open_paren(prev, curr, next))
+			return (1);
+		if (is_invalid_close_paren(curr, next))
+			return (1);
+
 		prev = curr;
-		node = node->next;
+		tokens = tokens->next;
 	}
 	return (0);
 }
+
 
 int	has_fatal_syntax_error(t_list *tokens)
 {
@@ -200,33 +226,99 @@ int	has_fatal_syntax_error(t_list *tokens)
 	return (0);
 }
 
+int	handle_line_init(t_list **all, char **full, char *line)
+{
+	char	*tmp;
+
+	if (!*line && !*all)
+		return (free(line), free(*full), -1);
+	tmp = ft_strjoin(*full, line);
+	if (!tmp)
+		return (free(line), free(*full), -1);
+	free(*full);
+	*full = tmp;
+	tmp = ft_strjoin(*full, " ");
+	if (!tmp)
+		return (free(*full), free(line), -1);
+	free(*full);
+	*full = tmp;
+	return (0);
+}
+
+t_list	*tokenize_and_append(t_list **all, char *line)
+{
+	t_list	*tokens;
+
+	tokens = tokenize(line);
+	free(line);
+	if (!tokens)
+	{
+		ft_lstclear(all, free_token);
+		return (NULL);
+	}
+	if (line_starts_with_op(tokens))
+	{
+		printf("syntax error near unexpected token '%s'\n",
+			((t_token *)tokens->content)->str);
+		ft_lstclear(&tokens, free_token);
+		ft_lstclear(all, free_token);
+		return (NULL);
+	}
+	append_token_list(all, tokens);
+	return (tokens);
+}
+
+int	process_syntax_checks(t_list **all)
+{
+	int	rstat;
+
+	if (has_fatal_syntax_error(*all))
+	{
+		printf("syntax error\n");
+		ft_lstclear(all, free_token);
+		return (-1);
+	}
+	rstat = has_invalid_redirection_sequences(*all);
+	if (rstat)
+	{
+		if (rstat == 2)
+			printf("syntax error near unexpected token `newline'\n");
+		else
+			printf("syntax error\n");
+		ft_lstclear(all, free_token);
+		return (-1);
+	}
+	return (0);
+}
+
+
 
 t_list	*read_and_accumulate_tokens(void)
 {
-	char	*line;
-	t_list	*all_tokens;
+	t_list	*all;
 	t_list	*tokens;
+	char	*line;
+	char	*full;
 
-	all_tokens = NULL;
+	all = NULL;
+	full = ft_strdup("");
+    if (!full) return (NULL);
 	line = readline(">> ");
 	while (line)
 	{
-		if (!*line && !all_tokens)
-			return (free(line), NULL);
-		add_history(line);
-		tokens = tokenize(line);
-		free(line);
-		if (line_starts_with_op(tokens))
-			return (printf("syntax error near unexpected token '%s'\n",
-				((t_token *)tokens->content)->str), ft_lstclear(&tokens, free_token), ft_lstclear(&all_tokens, free_token), NULL);
-		append_token_list(&all_tokens, tokens);
-		if (has_fatal_syntax_error(all_tokens))
-			return (printf("syntax error\n"), ft_lstclear(&all_tokens,free_token), NULL);
-		if (is_line_complete(all_tokens))
+		if (handle_line_init(&all, &full, line) == -1)
+			return (ft_lstclear(&all, free_token), NULL);
+		tokens = tokenize_and_append(&all, line);
+		if (!tokens)
+			return (free(full), NULL);
+		if (process_syntax_checks(&all) == -1)
+			return (free(full), NULL);
+		if (is_line_complete(all))
 			break;
-		line = readline(">> ");
+		line = readline("> ");
 	}
-	return (all_tokens);
+	add_history(full);
+	return (free(full), all);
 }
 
 

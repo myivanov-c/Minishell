@@ -6,10 +6,9 @@
 /*   By: mykytaivanov <mykytaivanov@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 14:47:19 by mykytaivano       #+#    #+#             */
-/*   Updated: 2025/11/15 11:47:02 by mykytaivano      ###   ########.fr       */
+/*   Updated: 2025/11/19 12:55:41 by mykytaivano      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "../minishell.h"
 #include "parse_line.h"
@@ -28,39 +27,71 @@ void    print_list(t_list *list)
     }
 }
 
-t_list	*tokenize(char const *line)
+int	extract_token_len(const char *line)
+{
+	if (ft_iscontrol(*line))
+		return (get_len_token_control(line));
+	return (get_len_token(line));
+}
+
+int	push_token(t_list **tokens, const char *line, int len)
+{
+	t_token	*tok;
+	t_list	*node;
+
+	tok = new_token(line, len);
+	if (!tok)
+		return (-1);
+	if (fill_token_flags(tok) == -1)
+	{
+		free_token(tok);
+		return (-1);
+	}
+	node = ft_lstnew(tok);
+	if (!node)
+	{
+		free_token(tok);
+		return (-1);
+	}
+	if (ft_lstadd_back(tokens, node) == -1)
+	{
+		free_token(tok);
+		free(node);
+		return (-1);
+	}
+	return (0);
+}
+
+
+t_list	*tokenize(const char *line)
 {
 	t_list	*tokens;
 	int		len;
 
 	if (!line)
 		return (NULL);
-	tokens = NULL;
 	while (ft_isspace(*line))
 		line++;
+	tokens = NULL;
 	while (*line)
 	{
-		if (ft_iscontrol(*line))
-			len = get_len_token_control(line);
-		else
-			len = get_len_token(line);
-		if ((len <= 0)
-			|| (ft_lstadd_back(&tokens, ft_lstnew(new_token(line, len))) == -1)
-			|| (fill_token_flags(ft_lstlast(tokens)->content) == -1))
+		len = extract_token_len(line);
+		if (len <= 0)
 			return (ft_lstclear(&tokens, free_token), NULL);
-		line += len;
+		if (push_token(&tokens, line, len) == -1)
+			return (ft_lstclear(&tokens, free_token), NULL);
+		line = line + len;
 		while (ft_isspace(*line))
 			line++;
 	}
 	return (tokens);
 }
 
-
 static int	get_len_token_control(const char *line)
 {
 	int			i;
 	int			len;
-	static char	*valid_controls[10] = {
+	static char	*valid_controls[9] = {
 		"||", "|", "<<", "<", ">>", ">", "&&", "(", ")"};
 	
 	i = 0;

@@ -6,7 +6,7 @@
 /*   By: mykytaivanov <mykytaivanov@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 14:43:33 by mykytaivano       #+#    #+#             */
-/*   Updated: 2025/11/15 11:42:58 by mykytaivano      ###   ########.fr       */
+/*   Updated: 2025/11/19 12:52:29 by mykytaivano      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,32 @@ int     ft_strcmp(char *s1, char *s2)
         i++;
     }
     return (s1[i] - s2[i]);
+}
+
+void	free_one_cmd(t_cmd *cmd)
+{
+	t_list *node;
+	t_list *next;
+
+	if (!cmd)
+		return ;
+	free(cmd->cmd_name);
+	free_str_array(cmd->cmd_args);
+	free_str_array(cmd->cmd_options);
+	node = cmd->redirs;
+	while (node)
+	{
+		t_redirs *r = (t_redirs *)node->content;
+		if (r)
+		{
+			free(r->file);
+			free(r);
+		}
+		next = node->next;
+		free(node);
+		node = next;
+	}
+	free(cmd);
 }
 
 void	free_cmd_array(t_cmd *cmd_array)

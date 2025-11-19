@@ -6,7 +6,7 @@
 /*   By: mykytaivanov <mykytaivanov@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 14:43:06 by mykytaivano       #+#    #+#             */
-/*   Updated: 2025/11/15 11:47:44 by mykytaivano      ###   ########.fr       */
+/*   Updated: 2025/11/19 12:54:16 by mykytaivano      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,8 @@ typedef struct s_cmd
 	char	*cmd_name;
 	char	**cmd_options;
 	char	**cmd_args;
+    t_list  *redirs;
 }	t_cmd;
-
-// type 0 = ()    type 1 = |    type 2 = &&    type 3 = ||    type 4 = cmd
-// exec_status 0 = not run    exec_status 1 = running    exec_status 2 = done
 
 typedef struct s_cmdtree_simple
 {
@@ -42,19 +40,29 @@ typedef struct s_cmdtree_simple
 }	t_cmdtree_simple;
 
 t_cmd     *parse_line(t_list *tokens);
+int	is_redirection_token(char *str);
 
 int     ft_strcmp(char *s1, char *s2);
 
 void	free_cmd_array(t_cmd *cmd_array);
 void	free_str_array(char **str_array);
+void	free_one_cmd(t_cmd *cmd);
+int	is_operator_str(char *str);
+
+
+
+//parse_simple_cmd.c
+
+t_cmd	*parse_simple_cmd(t_list *tokens);
+t_cmd	*init_cmd(void);
+int	add_arg(t_cmd *cmd, char *new_str);
+int	parse_cmd_token(t_token *token, t_cmd *cmd);
+int	parse_cmd_redir(t_list **tokens, t_cmd *cmd);
+int	get_redir_type(char *str);
+int	is_redirection_token(char *str);
+
+//syntax_readir.c
+int has_invalid_redirection_sequences(t_list *tokens);
+int is_word_token(char *s);
 
 #endif
-// (echo a | echo b) > test | echo c
-
-//               (type 3 |) "(echo a | echo b) > test | echo c"
-
-// (type 0)"(echo a | echo b) > test"                        (type 4 )"echo c"
-
-// (type 3 |)"echo a | echo b" 
-
-// (type 4 )"echo a"     (type 4 )"echo b" 
