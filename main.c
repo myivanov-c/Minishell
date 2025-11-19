@@ -6,7 +6,7 @@
 /*   By: mykytaivanov <mykytaivanov@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 14:38:41 by mykytaivano       #+#    #+#             */
-/*   Updated: 2025/11/19 12:54:35 by mykytaivano      ###   ########.fr       */
+/*   Updated: 2025/11/19 13:03:52 by mykytaivano      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,15 +150,11 @@ static int	is_invalid_open_paren(t_token *prev, t_token *curr, t_token *next)
 		return (0);
 	if (ft_strcmp(curr->str, "(") != 0)
 		return (0);
-
-	/* Caso 1: algo antes de "(" que não pode */
 	if (prev && prev->str)
 	{
 		if (!is_operator_str(prev->str) && ft_strcmp(prev->str, "(") != 0)
 			return (1);
 	}
-
-	/* Caso 2: depois de "(" vem operador (inválido) */
 	if (next && next->str)
 	{
 		if (is_operator_str(next->str))
@@ -177,8 +173,6 @@ static int	is_invalid_close_paren(t_token *curr, t_token *next)
 
 	if (!next || !next->str)
 		return (0);
-
-	/* Depois de ")" só pode vir: operador, redirection, ou outra ")" */
 	if (!is_operator_str(next->str)
 		&& !is_redirection_token(next->str)
 		&& ft_strcmp(next->str, ")") != 0)
