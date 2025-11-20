@@ -6,7 +6,7 @@
 /*   By: mykytaivanov <mykytaivanov@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 14:44:51 by mykytaivano       #+#    #+#             */
-/*   Updated: 2025/11/19 12:57:41 by mykytaivano      ###   ########.fr       */
+/*   Updated: 2025/11/20 16:35:02 by mykytaivano      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -297,9 +297,6 @@ t_list	*ft_lstremove_outer_parens(t_list *tokens)
 	ft_lstclear(&tokens, free_token);
 	return (new);
 }
-
-
-
 
 void	cmdtree_clear(t_cmdtree *tree)
 {
