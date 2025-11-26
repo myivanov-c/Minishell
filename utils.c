@@ -6,13 +6,13 @@
 /*   By: mykytaivanov <mykytaivanov@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 14:43:33 by mykytaivano       #+#    #+#             */
-/*   Updated: 2025/11/19 12:52:29 by mykytaivano      ###   ########.fr       */
+/*   Updated: 2025/11/26 19:10:09 by mykytaivano      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int     ft_strcmp(char *s1, char *s2)
+/*int     ft_strcmp(char *s1, char *s2)
 {
     int     i;
 
@@ -30,7 +30,7 @@ int     ft_strcmp(char *s1, char *s2)
         i++;
     }
     return (s1[i] - s2[i]);
-}
+}*/
 
 void	free_one_cmd(t_cmd *cmd)
 {

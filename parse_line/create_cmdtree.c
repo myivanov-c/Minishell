@@ -6,7 +6,7 @@
 /*   By: mykytaivanov <mykytaivanov@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 14:44:51 by mykytaivano       #+#    #+#             */
-/*   Updated: 2025/11/20 16:35:02 by mykytaivano      ###   ########.fr       */
+/*   Updated: 2025/11/26 19:16:54 by mykytaivano      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,14 @@ t_cmdtree	*cmdtree_new_node(t_list *tokens)
 	return (node);
 }
 
+static void	update_paren_level(char *str, int *level)
+{
+	if (ft_strcmp(str, "(") == 0)
+		(*level)++;
+	else if (ft_strcmp(str, ")") == 0)
+		(*level)--;
+}
+
 int	cmdtree_calc_type(t_cmdtree *cmdtree)
 {
 	t_token	*tok;
@@ -71,11 +79,8 @@ int	cmdtree_calc_type(t_cmdtree *cmdtree)
 	while (node)
 	{
 		tok = (t_token *)node->content;
-		if (ft_strcmp(tok->str, "(") == 0)
-			paren_level++;
-		else if (ft_strcmp(tok->str, ")") == 0)
-			paren_level--;
-		else if (paren_level == 0)
+		update_paren_level(tok->str, &paren_level);
+		if (paren_level == 0)
 		{
 			if (ft_strcmp(tok->str, "&&") == 0)
 				type = 2;
@@ -95,19 +100,16 @@ t_list	*get_split_point(t_list *tokens, int type)
 	t_list	*node;
 	t_list	*split;
 	t_token	*tok;
-	int		parens;
+	int		paren_level;
 
-	parens = 0;
+	paren_level = 0;
 	node = tokens;
 	split = NULL;
 	while (node)
 	{
 		tok = (t_token *)node->content;
-		if (ft_strcmp(tok->str, "(") == 0)
-			parens++;
-		else if (ft_strcmp(tok->str, ")") == 0)
-			parens--;
-		else if (parens == 0)
+        update_paren_level(tok->str, &paren_level);
+		if (paren_level == 0)
 		{
 			if (type == 1 && ft_strcmp(tok->str, "|") == 0)
 				return (node);
@@ -268,7 +270,8 @@ static int	has_double_outer_parens(t_list *tokens)
 		return (0);
 	tok1 = (t_token *)tokens->content;
 	tok2 = (t_token *)tokens->next->content; 
-	if (!tok1 || !tok2 || ft_strcmp(tok1->str, "(") != 0 || ft_strcmp(tok2->str, "(") != 0)
+	if (!tok1 || !tok2 || ft_strcmp(tok1->str, "(") != 0 
+        || ft_strcmp(tok2->str, "(") != 0)
 		return (0);
 	node = tokens;
 	while (node && node->next && node->next->next)
@@ -278,7 +281,8 @@ static int	has_double_outer_parens(t_list *tokens)
 		return (0);
 	tok1 = (t_token *)before_last->content;
 	tok2 = (t_token *)before_last->next->content;
-	if (!tok1 || !tok2 || ft_strcmp(tok1->str, ")") != 0 || ft_strcmp(tok2->str, ")") != 0)
+	if (!tok1 || !tok2 || ft_strcmp(tok1->str, ")") != 0 
+        || ft_strcmp(tok2->str, ")") != 0)
 		return (0);
 	return (1);
 }
@@ -313,46 +317,71 @@ void	cmdtree_clear(t_cmdtree *tree)
 	free(tree);
 }
 
+static int	process_leaf_node(t_cmdtree *cmd)
+{
+    printf("[LEAF] parsing simple cmd...\n");
+	cmd->cmd = parse_simple_cmd(cmd->tokens);
+	if (!cmd->cmd)
+		return (-1);
+	return (0);
+}
 
-int	cmdtree_expand(t_cmdtree *cmdtree)
+static int	init_children(t_cmdtree *cmd, t_split_result split)
+{
+	cmd->child1 = cmdtree_new_node(split.left);
+	if (!cmd->child1)
+	{
+		ft_lstclear(&split.left, free_token);
+		ft_lstclear(&split.right, free_token);
+		return (-1);
+	}
+	cmd->child2 = cmdtree_new_node(split.right);
+	if (!cmd->child2)
+	{
+		cmdtree_clear(cmd->child1);
+		cmd->child1 = NULL;
+		ft_lstclear(&split.right, free_token);
+		return (-1);
+	}
+	return (0);
+}
+
+static int	expand_children(t_cmdtree *cmd)
+{
+	cmd->child1->parent = cmd;
+	cmd->child2->parent = cmd;
+	if (cmdtree_expand(cmd->child1) == -1)
+		return (-1);
+	if (cmdtree_expand(cmd->child2) == -1)
+		return (-1);
+	return (0);
+}
+
+static int	process_operator_node(t_cmdtree *cmd)
 {
 	t_split_result	split;
 
-	cmdtree->tokens = ft_lstremove_outer_parens(cmdtree->tokens);
-	if (!cmdtree->tokens)
+	split = split_tokens(cmd->tokens, cmd->type);
+	if (!split.left || !split.right)
 		return (-1);
-	cmdtree->type = cmdtree_calc_type(cmdtree);
-	if (cmdtree->type >= 1 && cmdtree->type <= 3)
-	{
-		split = split_tokens(cmdtree->tokens, cmdtree->type);
-		if (!split.left || !split.right)
+	if (init_children(cmd, split) == -1)
+		return (-1);
+	return (expand_children(cmd));
+}
+
+int	cmdtree_expand(t_cmdtree *cmd)
+{
+	cmd->tokens = ft_lstremove_outer_parens(cmd->tokens);
+	if (!cmd->tokens)
+		return (-1);
+	cmd->type = cmdtree_calc_type(cmd);
+	if (cmd->type >= 1 && cmd->type <= 3)
+    {
+		if (process_operator_node(cmd) == -1)
 			return (-1);
-		cmdtree->child1 = cmdtree_new_node(split.left);
-		if (!cmdtree->child1)
-		{
-			ft_lstclear(&split.left, free_token);
-			ft_lstclear(&split.right, free_token);
-			return (-1);
-		}
-		cmdtree->child2 = cmdtree_new_node(split.right);
-		if (!cmdtree->child2)
-		{
-			cmdtree_clear(cmdtree->child1);
-			cmdtree->child1 = NULL;
-			ft_lstclear(&split.right, free_token);
-			return (-1);
-		}
-		cmdtree->child1->parent = cmdtree;
-		cmdtree->child2->parent = cmdtree;
-		if (cmdtree_expand(cmdtree->child1) == -1
-			|| cmdtree_expand(cmdtree->child2) == -1)
-			return (-1);
-	}
+    }
 	else
-	{
-		cmdtree->cmd = parse_simple_cmd(cmdtree->tokens);
-		if (!cmdtree->cmd)
+		if (process_leaf_node(cmd) == -1)
 			return (-1);
-	}
 	return (0);
 }

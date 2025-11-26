@@ -6,7 +6,7 @@
 /*   By: mykytaivanov <mykytaivanov@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 14:52:59 by mykytaivano       #+#    #+#             */
-/*   Updated: 2025/11/19 15:04:37 by mykytaivano      ###   ########.fr       */
+/*   Updated: 2025/11/26 19:15:27 by mykytaivano      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,15 +48,23 @@ int     has_unquoted_star(t_token *tok)
 
 t_list  *make_token_from_str(char const *str)
 {
-    t_token  *tok;
+    t_token *tok;
+    t_list  *node;
 
     if (!str)
         return (NULL);
     tok = new_token(str, -1);
     if (!tok)
         return (NULL);
-    return (ft_lstnew(tok));
+    node = ft_lstnew(tok);
+    if (!node)
+    {
+        free_token(tok);
+        return (NULL);
+    }
+    return (node);
 }
+
 
 int     insert_matches_after_node(t_list *node, char **matches)
 {
@@ -72,7 +80,7 @@ int     insert_matches_after_node(t_list *node, char **matches)
 	{
 		new = make_token_from_str(matches[i]);
 		if (!new)
-			return (-1);
+			return (ft_lstclear(&next, free_token), -1);
 		node->next = new;
 		node = new;
 		i++;
@@ -111,7 +119,8 @@ int	process_wilds_token(t_list **tokens, t_list **prev, t_list **curr)
 			*curr = *tokens;
 		return (1);
 	}
-	free_array_split(matches);
+    else
+	    free_array_split(matches);
 	return (0);
 }
 

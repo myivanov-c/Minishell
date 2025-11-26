@@ -6,7 +6,7 @@
 /*   By: mykytaivanov <mykytaivanov@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 12:20:05 by mykytaivano       #+#    #+#             */
-/*   Updated: 2025/11/21 12:37:36 by mykytaivano      ###   ########.fr       */
+/*   Updated: 2025/11/26 19:14:16 by mykytaivano      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int     builtin_cd(t_cmd *cmd)
     }
     if (argc > 2)
     {
-        write (2, "cd: too many arguments\n", 25);
+        write (2, "cd: too many arguments\n", 24);
         return (1);
     }
     path = cmd->cmd_args[1];

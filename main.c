@@ -6,10 +6,9 @@
 /*   By: mykytaivanov <mykytaivanov@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 14:38:41 by mykytaivano       #+#    #+#             */
-/*   Updated: 2025/11/19 13:03:52 by mykytaivano      ###   ########.fr       */
+/*   Updated: 2025/11/26 19:13:28 by mykytaivano      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "minishell.h"
 
@@ -35,8 +34,6 @@ int	line_starts_with_op(t_list *line_tokens)
 		|| ft_strcmp(tk->str, "||") == 0
 		|| ft_strcmp(tk->str, "|") == 0);
 }
-
-
 
 void	append_token_list(t_list **dst, t_list *src)
 {
@@ -160,7 +157,6 @@ static int	is_invalid_open_paren(t_token *prev, t_token *curr, t_token *next)
 		if (is_operator_str(next->str))
 			return (1);
 	}
-
 	return (0);
 }
 
@@ -286,7 +282,6 @@ int	process_syntax_checks(t_list **all)
 }
 
 
-
 t_list	*read_and_accumulate_tokens(void)
 {
 	t_list	*all;
@@ -314,7 +309,6 @@ t_list	*read_and_accumulate_tokens(void)
 	add_history(full);
 	return (free(full), all);
 }
-
 
 int	main(void)
 {

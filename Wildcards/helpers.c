@@ -48,4 +48,4 @@ void    append_matches(char ***filtered, char **matches)
 		free_array_split(matches);
 		*filtered = temp;
 	}
-}
+}*/

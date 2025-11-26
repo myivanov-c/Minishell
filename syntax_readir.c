@@ -6,10 +6,9 @@
 /*   By: mykytaivanov <mykytaivanov@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 12:53:07 by mykytaivano       #+#    #+#             */
-/*   Updated: 2025/11/19 12:53:35 by mykytaivano      ###   ########.fr       */
+/*   Updated: 2025/11/26 19:11:31 by mykytaivano      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "minishell.h"
 
@@ -29,7 +28,7 @@ static int redir_followup_status(t_list *node)
 
     nextn = node->next;
     if (!nextn)
-        return (2);
+        return (2); //newline
     next = (t_token *)nextn->content;
     if (!next || !next->str)
         return (2);

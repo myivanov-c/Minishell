@@ -6,7 +6,7 @@
 /*   By: mykytaivanov <mykytaivanov@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 12:52:02 by mykytaivano       #+#    #+#             */
-/*   Updated: 2025/11/20 16:37:45 by mykytaivano      ###   ########.fr       */
+/*   Updated: 2025/11/26 19:11:59 by mykytaivano      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,10 @@
 
 int	is_redirection_token(char *str)
 {
-	return (!ft_strcmp(str, "<") || !ft_strcmp(str, "<<")
-		|| !ft_strcmp(str, ">") || !ft_strcmp(str, ">>"));
+	return (ft_strcmp(str, "<") == 0
+     || ft_strcmp(str, "<<") == 0
+     || ft_strcmp(str, ">") == 0
+     || ft_strcmp(str, ">>") == 0);
 }
 
 int	get_redir_type(char *str)
@@ -48,6 +50,10 @@ int	parse_cmd_redir(t_list **tokens, t_cmd *cmd)
 		return (-1);
 	redir->type = get_redir_type(tok_op->str);
 	redir->file = ft_strdup(tok_file->str);
+    printf("[REDIR] op='%s' file='%s' type=%d\n",
+        tok_op->str,
+        tok_file->str,
+        redir->type);
 	if (!redir->file)
 		return (free(redir), -1);
 	node = ft_lstnew(redir);
@@ -57,17 +63,17 @@ int	parse_cmd_redir(t_list **tokens, t_cmd *cmd)
 	return (0);
 }
 
-
-
 int	parse_cmd_token(t_token *token, t_cmd *cmd)
 {
 	char	*str;
 
+    printf("[ARG] token='%s'\n", token->str);
 	str = token->str;
 	if (!str)
 		return (-1);
 	if (!cmd->cmd_name)
 	{
+        printf("[CMD_NAME] = '%s'\n", str);
 		cmd->cmd_name = ft_strdup(str);
 		if (!cmd->cmd_name)
 			return (-1);
@@ -88,6 +94,8 @@ int	add_arg(t_cmd *cmd, char *new_str)
 	int		count;
 	int		i;
 
+    printf("[add_arg] adding '%s'\n", new_str);
+
 	count = 0;
 	if (cmd->cmd_args)
 		while (cmd->cmd_args[count])
@@ -101,9 +109,11 @@ int	add_arg(t_cmd *cmd, char *new_str)
 		new_args[i] = cmd->cmd_args[i];
 		i++;
 	}
+    printf("[add_arg] previous args copied: %d\n", count);
 	new_args[i] = ft_strdup(new_str);
 	if (!new_args[i])
 		return (free(new_args), -1);
+    printf("[add_arg] DONE args[%d] = '%s'\n", i, new_args[i]);
 	new_args[i + 1] = NULL;
 	free(cmd->cmd_args);
 	cmd->cmd_args = new_args;
@@ -113,6 +123,8 @@ int	add_arg(t_cmd *cmd, char *new_str)
 t_cmd	*init_cmd(void)
 {
 	t_cmd	*cmd;
+    
+    printf("[INIT_CMD]\n");
 
 	cmd = malloc(sizeof(t_cmd));
 	if (!cmd)
@@ -136,6 +148,7 @@ t_cmd	*parse_simple_cmd(t_list *tokens)
 	while (tokens)
 	{
 		token = (t_token *)tokens->content;
+        printf("[parse_simple_cmd] TOKEN = '%s'\n", token->str);
 		if (!token || !token->str)
 			return (free_one_cmd(cmd), NULL);
 		if (is_redirection_token(token->str))

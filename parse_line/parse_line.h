@@ -6,7 +6,7 @@
 /*   By: mykytaivanov <mykytaivanov@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 14:46:05 by mykytaivano       #+#    #+#             */
-/*   Updated: 2025/11/19 12:56:23 by mykytaivano      ###   ########.fr       */
+/*   Updated: 2025/11/26 19:15:56 by mykytaivano      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <stdlib.h>
 # include <stdio.h>
+# include "../Wildcards/wildcards.h"
 
 #define REDIR_IN 0
 #define REDIR_OUT 1
